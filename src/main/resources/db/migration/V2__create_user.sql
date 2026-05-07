@@ -1,0 +1,16 @@
+INSERT INTO users (username, password, role)
+VALUES ('user1',
+        '$2b$10$o2XEdR8sOuP02b4eR0ka8OQXZBVV2RgoJ6LL9CGMBMsM4qmx2zhLK',
+        'USER'),
+       ('admin',
+        '$2b$10$bnrZ7qp2K5qS9Jf0sz5s1ezzBWEv6ZMBm0e6zCSpQPK1eEbUDkzXi',
+        'ADMIN'),
+       ('mShardha',
+        '$2b$10$6VqeraX4cybY21i2Ecbfa.if/tzwEdLZ2Bmfh7T72J1prAy78lMH6',
+        'MANAGER'),
+       ('staff1',
+        '$2b$10$U72z3bgyuSVoauX/lkjVIeLSAOXvCg9vHKszAXzgM08P75CfwdmXO',
+        'STAFF'),
+       ('shanuka',
+        '$2b$10$sfHak6/pkr68KCDbQJ/tEeLqvYNaL8LeSUnI9U6yDBvwK5v5vGTeK',
+        'ADMIN');
