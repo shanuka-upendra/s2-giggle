@@ -1,6 +1,8 @@
 package com.security.controller;
 
 
+import com.security.model.User;
+import com.security.service.MyUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/secure")
 @RequiredArgsConstructor
 public class AuthController {
+
+    private final MyUserDetailService userService;
 
     @GetMapping("/user")
     public String sayHelloToUser() {
@@ -29,6 +33,11 @@ public class AuthController {
     @GetMapping("/staff")
     public String sayHelloToStaff() {
         return "Hello Staff!";
+    }
+
+    @PostMapping("/auth/register")
+    public void registerUser(@RequestBody User user) {
+        userService.registerUser(user);
     }
 
 

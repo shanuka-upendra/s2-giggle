@@ -31,8 +31,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/public/**").permitAll()
-                                .requestMatchers("/secure/register").permitAll()
+                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/secure/auth/register").permitAll()
                                 .requestMatchers("/secure/admin").hasRole("ADMIN")
                                 .requestMatchers("/secure/manager").hasAnyRole("MANAGER", "ADMIN")
                                 .requestMatchers("/secure/staff").hasAnyRole("STAFF", "MANAGER", "ADMIN")
@@ -76,14 +76,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService){
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setPasswordEncoder(passwordEncoder);
         return provider;
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(12);
     }
 }
