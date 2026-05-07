@@ -1,5 +1,6 @@
 package com.security.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import lombok.Getter;
 import lombok.Setter;
 
