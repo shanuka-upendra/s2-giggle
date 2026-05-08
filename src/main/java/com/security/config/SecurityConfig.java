@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,12 +30,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/**").permitAll()
-                                .requestMatchers("/secure/auth/register").permitAll()
-                                .requestMatchers("/secure/admin").hasRole("ADMIN")
-                                .requestMatchers("/secure/manager").hasAnyRole("MANAGER", "ADMIN")
-                                .requestMatchers("/secure/staff").hasAnyRole("STAFF", "MANAGER", "ADMIN")
-                                .requestMatchers("/secure/user").hasAnyRole("USER", "MANAGER", "ADMIN")
+                                .requestMatchers("/", "/secure/auth/register").permitAll()
+                                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                                .requestMatchers("/secure/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/secure/manager/**").hasAnyRole("MANAGER", "ADMIN")
+                                .requestMatchers("/secure/staff/**").hasAnyRole("STAFF", "MANAGER", "ADMIN")
+                                .requestMatchers("/secure/user/**").hasAnyRole("USER", "MANAGER", "ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
