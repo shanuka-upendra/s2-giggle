@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,10 +40,14 @@ public class AdminController {
     public ResponseEntity<Map<String, Object>> getAllMembers() {
         try {
             List<User> users = userRepository.findAll();
+            List<Map<String, Object>> safeUsers = new ArrayList<>();
+            for (User user : users) {
+                safeUsers.add(toSafeUser(user));
+            }
             Map<String, Object> response = new HashMap<>();
             response.put("status", "success");
             response.put("count", users.size());
-            response.put("data", users);
+            response.put("data", safeUsers);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return buildErrorResponse("Failed to retrieve team members", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,7 +70,7 @@ public class AdminController {
             }
             Map<String, Object> response = new HashMap<>();
             response.put("status", "success");
-            response.put("data", user);
+            response.put("data", toSafeUser(user));
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return buildErrorResponse("Error retrieving team member", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -246,7 +251,11 @@ public class AdminController {
             response.put("status", "success");
             response.put("role", role.toUpperCase());
             response.put("count", filteredUsers.size());
-            response.put("data", filteredUsers);
+            List<Map<String, Object>> safeUsers = new ArrayList<>();
+            for (User user : filteredUsers) {
+                safeUsers.add(toSafeUser(user));
+            }
+            response.put("data", safeUsers);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return buildErrorResponse("Failed to retrieve team members by role", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -288,5 +297,13 @@ public class AdminController {
         errorResponse.put("status", "error");
         errorResponse.put("message", message);
         return ResponseEntity.status(status).body(errorResponse);
+    }
+
+    private Map<String, Object> toSafeUser(User user) {
+        Map<String, Object> safeUser = new HashMap<>();
+        safeUser.put("id", user.getId());
+        safeUser.put("username", user.getUsername());
+        safeUser.put("role", user.getRole());
+        return safeUser;
     }
 }
